@@ -1,17 +1,18 @@
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import { eventKeys } from "./event";
-import "./index.css";
-import * as api from "./api";
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { eventKeys } from './event';
+import './index.css';
+import * as api from './api';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      networkMode: "offlineFirst",
+      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+      networkMode: 'offlineFirst',
     },
   },
 });
@@ -34,13 +35,13 @@ queryClient.setMutationDefaults(eventKeys.add(), {
   },
 });
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <PersistQueryClientProvider
       client={queryClient}
       persistOptions={{ persister }}
       onSuccess={() => {
-        console.log("PersistQueryClientProvider onSuccess");
+        console.log('PersistQueryClientProvider onSuccess');
         queryClient.resumePausedMutations().then(() => {
           queryClient.invalidateQueries();
         });
